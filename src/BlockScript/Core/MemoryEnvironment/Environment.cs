@@ -19,13 +19,13 @@ public class ProgramEnvironment
         this.Bindings = new Dictionary<string, BindingMetaData>();
     } 
 
-    public DefineVarStatusCode DefineVar(string name, ObjectType type, object? initialValue = null)
+    public DefineVarStatusCode DefineVar(string name, ObjectType type)
     {
         DefineVarStatusCode statusCode;
-        int? index = GetFreeIndex();
+        int? assignedIndex = GetFreeIndex();
 
         //Memory Validation
-        if (index == null)
+        if (assignedIndex == null)
         {
             return DefineVarStatusCode.OutOfMemory;
         }
@@ -37,8 +37,17 @@ public class ProgramEnvironment
             return statusCode;
         }
         
-        //TODO Implement Initialisation by calling assign function
-        //TODO Implement Binding
+        //Preparing Metadata.
+        BindingMetaData bindingMetaData = new BindingMetaData
+        (
+            Index: (int)assignedIndex,
+            BindingType: type,
+            IsInitialised: false
+        );
+
+        //Defining Variable
+        Bindings.Add(name, bindingMetaData);
+
         return DefineVarStatusCode.Success;
     }
 
@@ -154,5 +163,10 @@ public class BindingMetaData
         this.Index = Index;
         this.BindingType = BindingType;
         this.IsInitialised = false;
+    }
+
+    public override string ToString()
+    {
+        return $"Index: {Index}\nType: {BindingType}\nIsInitialised: {IsInitialised}";
     }
 }
