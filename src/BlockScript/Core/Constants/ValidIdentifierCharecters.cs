@@ -1,6 +1,6 @@
 namespace BlockScript
 {
-    class IdentifierConstants
+    static class IdentifierConstants
     {
         //ONLY FOR HOST LANGUAGE VALIDATION. INTERPRETED LANGUAGE HAS A DIFFERENT CHAR SYSTEM
 

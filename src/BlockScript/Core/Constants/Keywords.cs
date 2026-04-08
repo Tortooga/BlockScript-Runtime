@@ -1,6 +1,6 @@
 namespace BlockScript;
 
-class Keywords
+static class Keywords
 {
     public static readonly string[] ReservedKeywords = 
     {

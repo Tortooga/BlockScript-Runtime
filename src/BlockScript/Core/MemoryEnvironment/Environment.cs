@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.VisualBasic;
 using Microsoft.Win32.SafeHandles;
 
@@ -36,10 +37,11 @@ public class ProgramEnvironment
             return statusCode;
         }
         
-        //TODO Implement Type Validation
-        //TODO Implement Binding and initialisation
+        //TODO Implement Initialisation by calling assign function
+        //TODO Implement Binding
         return DefineVarStatusCode.Success;
     }
+
 
     public DefineVarStatusCode ValidateIdentifier(string identifier)
     {
