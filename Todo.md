@@ -3,9 +3,11 @@
 ## Memory And Environment
 - [x] Create Memory Class
 - [x] Create Environment Class
-- [ ] Implement VarDefine in Environment Class
+- [X] Implement VarDefine in Environment Class
+- [X] Implement identifier length upper limit
 - [ ] Add Identifier Validation to VarDefine
 - [ ] Add Type Validation to VarDefine
+- [ ] *Implement IsUsed BitMap to locate free memory faster
 
 ## Error Handeling
 - [ ] Create Error Class

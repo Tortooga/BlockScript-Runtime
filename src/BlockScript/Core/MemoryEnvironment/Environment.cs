@@ -1,51 +1,143 @@
+using Microsoft.VisualBasic;
+using Microsoft.Win32.SafeHandles;
+
 namespace BlockScript;
 
 public class ProgramEnvironment
 {
-    public ProgramMemory Memory {get; set;}
+    const int MaxIdentifierLength = 16;
+
+    public ProgramMemory EnvironmentMemory {get; set;}
     public Dictionary<String,  BindingMetaData> Bindings {get; set;}
 
-    public ProgramEnvironment(ProgramMemory Memory)
+
+
+    public ProgramEnvironment(int memorySize)
     {
-        this.Memory = Memory;
+        this.EnvironmentMemory = new ProgramMemory(memorySize);
         this.Bindings = new Dictionary<string, BindingMetaData>();
     } 
 
     public DefineVarStatusCode DefineVar(string name, ObjectType type, object? initialValue = null)
     {
-        int? index = AllocateIndex();
+        DefineVarStatusCode statusCode;
+        int? index = GetFreeIndex();
+
+        //Memory Validation
         if (index == null)
         {
             return DefineVarStatusCode.OutOfMemory;
         }
 
-        //TODO Implement Identifier validation
+        //IdentifierValidation
+        statusCode = ValidateIdentifier(name);
+        if (statusCode != DefineVarStatusCode.Success)
+        {
+            return statusCode;
+        }
+        
         //TODO Implement Type Validation
-
         //TODO Implement Binding and initialisation
         return DefineVarStatusCode.Success;
     }
 
-    private int? AllocateIndex()
+    public DefineVarStatusCode ValidateIdentifier(string identifier)
     {
-        int index = 0; 
-
-        //Finding the last index allocated
-        foreach (var binding in Bindings)
+        if (identifier.Length <= 0 || identifier.Length > MaxIdentifierLength)
         {
-            if (binding.Value.Index > index)
+            return DefineVarStatusCode.InvalidIdentifierLength;
+        }
+
+        //Checking if first character in identifier is invalid
+        if (!CharIsInArray(identifier[0], IdentifierConstants.ValidIdentifierStartCharacters))
+        {
+            return DefineVarStatusCode.InvalidIdentifierStart;
+        }
+        
+
+        //Checking if the rest of the body is valid
+        for (int i = 1; i < identifier.Length; i++)
+        {
+            if (!CharIsInArray(identifier[i], IdentifierConstants.ValidIdentifierCharacters))
             {
-                index = binding.Value.Index;
+                return DefineVarStatusCode.InvalidIdentifierBody;
             }
         }
-        index++;
 
-        if (index > Memory.Size - 1)
+        //Checking if keyword is reserved
+        if (IsReserved(identifier))
         {
-            return null;
+            return DefineVarStatusCode.ReservedKeyword;
         }
 
-        return index;
+        //Checking if identifier is already a key in a binding
+        if (IdentifierIsUsed(identifier))
+        {
+            return DefineVarStatusCode.IdentifierAlreadyUsed;
+        }
+        return DefineVarStatusCode.Success;
+    }
+
+    private bool IdentifierIsUsed(string identifier)
+    {
+        foreach (var binding in Bindings)
+        {
+            if (binding.Key == identifier)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private static bool IsReserved(string keyword)
+    {
+        for (int i = 0; i < Keywords.ReservedKeywords.Length; i++)
+        {
+            if (keyword == Keywords.ReservedKeywords[i])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool CharIsInArray(char c, char[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (c == array[i])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private int? GetFreeIndex()
+    {
+        for (int index = 0; index < EnvironmentMemory.Size; index++)
+        {
+            if (!IndexIsUsed(index))
+            {
+                return index;
+            }
+        }
+        return null;
+    }
+
+    private bool IndexIsUsed(int index)
+    {
+        foreach (var binding in Bindings)
+        {
+            if (binding.Value.Index == index)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

@@ -12,7 +12,7 @@ public class ProgramMemory
 
     public ProgramMemory(int Size)
     {
-        this.Size = Size;
+        this.Size = Size;   
         this.Data = new int[Size];
     }
 }

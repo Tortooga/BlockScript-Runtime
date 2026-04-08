@@ -6,7 +6,9 @@ public enum DefineVarStatusCode
     Success,
 
     //Identifier Issues
-    InvalidIdentifier,
+    InvalidIdentifierLength,
+    InvalidIdentifierBody,
+    InvalidIdentifierStart,
     ReservedKeyword,
     IdentifierAlreadyUsed,
 
