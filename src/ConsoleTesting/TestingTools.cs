@@ -10,4 +10,14 @@ public static class TestingTool
             Console.WriteLine();
         }
     }
+
+    public static void PrintMemory(ProgramMemory memory)
+    {
+        Console.WriteLine($"Memory Size: {memory.Size}");
+        for (int i = 0; i < memory.Size; i++)
+        {
+            Console.Write($"{i}| {memory.Data[i]}    ");
+        }
+        Console.WriteLine();
+    }
 }

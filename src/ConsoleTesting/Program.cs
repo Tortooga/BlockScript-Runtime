@@ -4,11 +4,10 @@ using BlockScript;
 
 ProgramEnvironment programEnvironment = new ProgramEnvironment(5);
 
-for (int i = 0; i < 5; i++)
-{
-    Console.WriteLine(programEnvironment.DefineVar(
-        $"hello{i}", ObjectType.IntType
-    ));    
-}
+Console.WriteLine(programEnvironment.DefineVar(
+    $"hello", ObjectType.IntType
+));    
+
+TestingTool.PrintMemory(programEnvironment.EnvironmentMemory);
 
 TestingTool.PrintEnvironment(programEnvironment);
