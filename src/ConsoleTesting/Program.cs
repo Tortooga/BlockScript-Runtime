@@ -2,10 +2,13 @@
 using System.Text;
 using BlockScript;
 
-ProgramEnvironment programEnvironment = new ProgramEnvironment(2);
+ProgramEnvironment programEnvironment = new ProgramEnvironment(5);
 
-Console.WriteLine(programEnvironment.DefineVar(
-    "hello", ObjectType.IntType
-));
+for (int i = 0; i < 5; i++)
+{
+    Console.WriteLine(programEnvironment.DefineVar(
+        $"hello{i}", ObjectType.IntType
+    ));    
+}
 
 TestingTool.PrintEnvironment(programEnvironment);

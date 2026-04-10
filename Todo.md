@@ -9,7 +9,7 @@
 - [ ] Implement AssignValue to Environment
 - [ ] Add Type Validation to AssignValue
 - [ ] Use AssignValue to add type initialisation in DefineVar
-- [ ] *Implement IsUsed BitMap to locate free memory faster
+- [X] *Implement IsUsed BitMap to locate free memory faster
 - [ ] Implement arrays and strings.
 ## Error Handeling
 - [ ] Create Error Class

@@ -1,6 +1,4 @@
-using System.Text;
-using Microsoft.VisualBasic;
-using Microsoft.Win32.SafeHandles;
+using System.Collections;
 
 namespace BlockScript;
 
@@ -10,13 +8,14 @@ public class ProgramEnvironment
 
     public ProgramMemory EnvironmentMemory {get; set;}
     public Dictionary<String,  BindingMetaData> Bindings {get; set;}
-
+    public BitArray AddressIsUsed; //Address highlighting which addresses are used in memory
 
 
     public ProgramEnvironment(int memorySize)
     {
         this.EnvironmentMemory = new ProgramMemory(memorySize);
         this.Bindings = new Dictionary<string, BindingMetaData>();
+        this.AddressIsUsed = new BitArray(memorySize); 
     } 
 
     public DefineVarStatusCode DefineVar(string name, ObjectType type)
@@ -47,6 +46,10 @@ public class ProgramEnvironment
 
         //Defining Variable
         Bindings.Add(name, bindingMetaData);
+
+        //Mark memory as used in AddressIsUsed bitmap
+        AddressIsUsed[(int)assignedIndex] = true;
+
 
         return DefineVarStatusCode.Success;
     }
@@ -128,9 +131,9 @@ public class ProgramEnvironment
     }
     private int? GetFreeIndex()
     {
-        for (int index = 0; index < EnvironmentMemory.Size; index++)
+        for (int index = 0; index < AddressIsUsed.Length; index++)
         {
-            if (!IndexIsUsed(index))
+            if (!AddressIsUsed[index])
             {
                 return index;
             }
