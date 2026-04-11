@@ -2,12 +2,11 @@
 using System.Text;
 using BlockScript;
 
-ProgramEnvironment programEnvironment = new ProgramEnvironment(5);
+ProgramEnvironment programEnvironment = new ProgramEnvironment(7);
 
-Console.WriteLine(programEnvironment.DefineVar(
-    $"hello", ObjectType.IntType
-));    
 
-TestingTool.PrintMemory(programEnvironment.EnvironmentMemory);
+DefineVarStatusCode status = programEnvironment.DefineVar("hello", ObjectType.IntType);
 
 TestingTool.PrintEnvironment(programEnvironment);
+
+TestingTool.PrintMemory(programEnvironment.EnvironmentMemory);

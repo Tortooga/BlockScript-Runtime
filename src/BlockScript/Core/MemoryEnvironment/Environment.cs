@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 
 namespace BlockScript;
 
@@ -139,19 +140,6 @@ public class ProgramEnvironment
             }
         }
         return null;
-    }
-
-    private bool IndexIsUsed(int index)
-    {
-        foreach (var binding in Bindings)
-        {
-            if (binding.Value.Index == index)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
 
